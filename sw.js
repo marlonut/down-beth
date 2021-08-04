@@ -1,3 +1,4 @@
+import { updateCacheDynamic } from "sw-utils.js";
 const STATIC__CACHE = "static-v1";
 const DYNAMIC__CACHE = "dynamic-v1";
 const IMMUTABLE__CACHE = "immutable-v1";
@@ -51,13 +52,13 @@ self.addEventListener("activate", (e) => {
   e.waitUntil(response);
 });
 self.addEventListener("fetch", (e) => {
-//   const request = caches.match(e.request.url).then(async (cache) => {
-//     if (cache) {
-//       return cache;
-//     } else {
-//       const response = await fetch(e.request.url);
-//     //   return updateCacheDynamic(DYNAMIC__CACHE, e.request.url, response);
-//     }
-//   });
+  const request = caches.match(e.request.url).then(async (cache) => {
+    if (cache) {
+      return cache;
+    } else {
+      const response = await fetch(e.request.url);
+      return updateCacheDynamic(DYNAMIC__CACHE, e.request.url, response);
+    }
+  });
   e.respondWith(e.request.url);
 });
